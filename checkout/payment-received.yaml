@@ -1,0 +1,9 @@
+# payment-received.yaml
+- from:
+    uri: "nats:ORDERS.PAYMENT-RECEIVED?servers={{NATS_SERVER}}"
+    steps:
+      - log:
+          message: "PAYMENT-RECEIVED for ${body}"
+          loggingLevel: "INFO"
+      - to:
+          uri: "nats:ORDERS.DELIVERED?servers={{NATS_SERVER}}"

@@ -1,0 +1,9 @@
+# order-created.yaml
+- from:
+    uri: "nats:ORDERS.ORDER-CREATED?servers={{NATS_SERVER}}"
+    steps:
+      - log:
+          message: "ORDER-CREATED for ${body}"
+          loggingLevel: "INFO"
+      - to:
+          uri: "nats:ORDERS.PAYMENT-RECEIVED?servers={{NATS_SERVER}}"

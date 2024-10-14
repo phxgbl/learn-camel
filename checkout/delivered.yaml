@@ -1,0 +1,7 @@
+# delivered.yaml
+- from:
+    uri: "nats:ORDERS.DELIVERED?servers={{NATS_SERVER}}"
+    steps:
+      - log:
+          message: "ORDER DELIVERED for ${body}"
+          loggingLevel: "INFO"

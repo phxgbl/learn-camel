@@ -1,0 +1,9 @@
+- from:
+    uri: "nats:ORDERS.CHECKOUT?servers=localhost:4222"
+    steps:
+      - log:
+          message: "Received order request: ${body}"
+      - set-body:
+          simple: "Order processed successfully for ${body}"
+      - log:
+          message: "Sending response: ${body}"

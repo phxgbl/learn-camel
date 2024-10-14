@@ -1,0 +1,24 @@
+- from:
+    uri: "timer:trigger?period=5000"
+    steps:
+      - script:
+          groovy: |
+            // Static field to maintain the counter state
+            class CounterState {
+              static int counter = 0
+            }
+
+            // Increment the counter
+            CounterState.counter += 1
+
+            // Update the exchange property (not the entire body)
+            exchange.setProperty("orderId", CounterState.counter)
+      - log:
+          message: "Updated Counter Value: ${exchangeProperty.orderId}"
+      - setBody:
+          simple: "ORDER_ID:${exchangeProperty.orderId}"
+      - to:
+          uri: "nats:ORDERS.CHECKOUT?servers={{NATS_SERVER}}"
+      - log:
+          message: "Published message to ORDERS.CHECKOUT: ${body}"
+          loggingLevel: "INFO"

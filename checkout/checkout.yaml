@@ -1,0 +1,9 @@
+# checkout.yaml
+- from:
+    uri: "nats:ORDERS.CHECKOUT?servers={{NATS_SERVER}}"
+    steps:
+      - log:
+          message: "CHECKOUT for ${body}"
+          loggingLevel: "INFO"
+      - to:
+          uri: "nats:ORDERS.ORDER-CREATED?servers={{NATS_SERVER}}"

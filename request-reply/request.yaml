@@ -1,0 +1,15 @@
+- from:
+    uri: "timer:trigger?period=50000"
+    steps:
+      - set-body:
+          constant: "Place order for item 12345"
+      - log:
+          message: "Sending order request: ${body}"
+      - to:
+          uri: "nats:ORDERS.CHECKOUT?servers=localhost:4222"
+          pattern: InOut  # Ensures the producer waits for a reply
+      - log:
+          message: "Received response: ${body}"
+
+
+
