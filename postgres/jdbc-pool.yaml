@@ -1,0 +1,32 @@
+# - from:
+#     uri: "timer:query?period=5000"
+#     steps:
+#       - setBody:
+#           constant: "SELECT * FROM todo"
+#       - to: "jdbc:myDataSource?dataSource=#myDataSource"
+#       - log: "Query result: ${body}"
+
+# - beans:
+#     - name: myDataSource
+#       type: org.postgresql.ds.PGSimpleDataSource
+#       properties:
+#         url: jdbc:postgresql://localhost:5432/test
+#         user: postgres
+#         password: postgres
+
+- from:
+    uri: "timer:query?period=5000"
+    steps:
+      - setBody:
+          constant: "SELECT * FROM a189.todo"
+      - to: "jdbc:pdDataSource?dataSource=#pdDataSource"
+      - log: "Query result: ${body}"
+
+- beans:
+    - name: pdDataSource
+      type: com.zaxxer.hikari.HikariDataSource
+      properties:
+        jdbcUrl: "jdbc:postgresql://localhost:5432/test"
+        username: "postgres"
+        password: "postgres"
+        maximumPoolSize: 10

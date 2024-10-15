@@ -1,0 +1,8 @@
+- beans:
+    - name: pdDataSource
+      type: com.zaxxer.hikari.HikariDataSource
+      properties:
+        jdbcUrl: "jdbc:postgresql://localhost:5432/test"
+        username: "postgres"
+        password: "postgres"
+        maximumPoolSize: 10

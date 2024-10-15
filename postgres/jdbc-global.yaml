@@ -1,0 +1,8 @@
+#sharedDatasource from application.properties
+- from:
+    uri: "timer:query?period=2"
+    steps:
+      - setBody:
+          constant: "SELECT * FROM a189.todo"
+      - to: "jdbc:sharedDatasource"
+      - log: "Query result: ${body}"
