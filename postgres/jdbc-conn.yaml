@@ -1,0 +1,11 @@
+- from:
+    uri: "timer:query?period=50000"
+    steps:
+      - setBody:
+          constant: "SELECT * FROM a189.todo"
+      - to: "jdbc:transientDataSource"
+      - marshal:
+          json:
+            library: Jackson  # Use the Jackson library for JSON conversion
+      - log:
+          message: "Query result: ${body}"  # This will now be in JSON format
