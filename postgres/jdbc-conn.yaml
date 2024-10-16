@@ -1,11 +1,15 @@
 - from:
     uri: "timer:query?period=50000"
     steps:
+      - setHeader:
+          name: "name"
+          constant: "walk"  # Example name value
       - setBody:
-          constant: "SELECT * FROM a189.todo"
-      - to: "jdbc:transientDataSource"
+          simple: "SELECT * FROM a189.todo WHERE name = :?name"
+      - to: "jdbc:transientDataSource?useHeadersAsParameters=true"
       - marshal:
           json:
             library: Jackson  # Use the Jackson library for JSON conversion
       - log:
-          message: "Query result: ${body}"  # This will now be in JSON format
+          message: "Query result: ${body}"
+#CAST(:?id AS INTEGER)
