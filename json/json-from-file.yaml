@@ -1,0 +1,30 @@
+- from:
+      uri: "file:/home/aneer/workspace/adaptaiWS/learn-camel/json/?noop=true&fileName=data.json"
+      steps:
+        - unmarshal:
+            json:
+              library: Jackson
+        - set-body:
+            groovy: |
+              def table = request.body.table
+              def ddl = new StringBuilder()
+              ddl.append("CREATE TABLE ${table.schema}.${table.name} (\n")
+              def columns = table.columns
+              columns.eachWithIndex { column, index ->
+                  ddl.append("    ${column.name} ${column.type}")
+                  if (!column.is_nullable) {
+                      ddl.append(" NOT NULL")
+                  }
+                  if (column.is_unique) {
+                      ddl.append(" UNIQUE")
+                  }
+                  if (column.is_identity) {
+                      ddl.append(" PRIMARY KEY")
+                  }
+                  if (index < columns.size() - 1) {
+                      ddl.append(",\n")
+                  }
+              }
+              ddl.append("\n);")
+              ddl.toString()
+        - to: "log:info"

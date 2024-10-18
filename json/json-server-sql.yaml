@@ -1,0 +1,33 @@
+- from:
+    uri: "jetty:http://0.0.0.0:9090/processJson"
+    steps:
+      - log:
+          message: "${body}"
+      - unmarshal:
+          json:
+            library: Jackson
+      - set-body:
+          groovy: |
+            def table = request.body.table
+            def ddl = new StringBuilder()
+            ddl.append("CREATE TABLE ${table.schema}.${table.name} (\n")
+            def columns = table.columns
+            columns.eachWithIndex { column, index ->
+                ddl.append("    ${column.name} ${column.type}")
+                if (!column.is_nullable) {
+                    ddl.append(" NOT NULL")
+                }
+                if (column.is_unique) {
+                    ddl.append(" UNIQUE")
+                }
+                if (column.is_identity) {
+                    ddl.append(" PRIMARY KEY")
+                }
+                if (index < columns.size() - 1) {
+                    ddl.append(",\n")
+                }
+            }
+            ddl.append("\n);")
+            return ddl.toString()
+      - to: "log:info"
+      - to: "jdbc:transientDataSource?useHeadersAsParameters=true"
